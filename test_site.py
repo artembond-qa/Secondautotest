@@ -30,7 +30,7 @@ def get_driver():
     # Автоматически скачивает и использует правильный ChromeDriver
     service = Service(ChromeDriverManager().install())
     driver = webdriver.Chrome(service=service, options=options)
-    return drivergit
+    return driver
 
 def login(driver):
     driver.get('https://www.demoblaze.com/index.html')
@@ -41,24 +41,17 @@ def login(driver):
 
 def test_login_works(driver):
     login(driver)
+
     username = os.getenv('MY_LOGIN')
     password = os.getenv('MY_PASSWORD')
-    # твоя функция
 
-    # Вводим логин и пароль (рабочие данные для demoblaze)
     driver.find_element(By.ID, "loginusername").send_keys(username)
     driver.find_element(By.ID, "loginpassword").send_keys(password)
 
     driver.find_element(By.XPATH, "//button[text()='Log in']").click()
 
     wait = WebDriverWait(driver, 10)
-    welcome_text = wait.until(
-        EC.text_to_be_present_in_element((By.ID, "nameofuser"), "Welcome Test1556")
-    )
-
-    assert "Welcome Test1556" in driver.find_element(By.ID, "nameofuser").text
-    print("✅ Успешный вход под Test1556!")
-
+    wait.until(
         EC.text_to_be_present_in_element((By.ID, "nameofuser"), "Welcome Test1556")
     )
 
